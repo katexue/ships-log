@@ -17,6 +17,8 @@ export let web3Provider = typeof web3 !== 'undefined'
 const networkCallbacks = []
 export const onNetworkUpdate = (callback) => {
   networkCallbacks.push(callback)
+
+  console.log('networkCallbacks', networkCallbacks)
 }
 
 export async function connectWallet() {
@@ -27,8 +29,8 @@ export async function connectWallet() {
     // Portis wallet: https://docs.portis.io/#/quick-start
     const portis = new Portis('002a5b91-a409-4675-beef-64fea029c62c', 'mainnet');
     web3Provider = new Web3(portis.provider)
-    console.log(web3Provider)
 
+    console.log('Portis: ', web3Provider)
   } else if (window.ethereum) {
     window.ethereum.enable()
   } else {
@@ -37,11 +39,13 @@ export async function connectWallet() {
     throw new Error(errorMessage)
   }
 
-  web3Provider.eth.getAccounts((error, accounts) => {
-    console.log(accounts)
-  })
+  console.log('test1')
 
-  networkCallbacks.map((c) => c(web3Provider))
+  console.log('test2')
+
+  networkCallbacks.map((c) => c())
+
+  console.log('test3')
 }
 
 export function toUnitAmount(baseAmount, tokenContract = null) {

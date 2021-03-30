@@ -16,16 +16,33 @@ export default class App extends React.Component {
     onNetworkUpdate(this.onChangeAddress)
   }
 
-  onChangeAddress = () => {
-    console.log(web3Provider)
+  onChangeAddress = (updateWeb3Provider) => {
+    // if (test) {
+    //   console.log('test!')
+    //   test.eth.getAccounts((error, accounts) => {
+    //     if (error) {
+    //       console.log('1error', error)
+    //     }
+
+    //     console.log('1accounts', accounts)
+    //   })
+    // }
+    // if (updateWeb3Provider && updateWeb3Provider !== undefined) {
+    //   console.log(updateWeb3Provider)
+    //   web3Provider = updateWeb3Provider
+    // }
 
     this.seaport = new OpenSeaPort(web3Provider, {
       networkName: Network.Main
     })
     this.web3 = this.seaport.web3
+    console.log('this.web3', this.web3)
     this.web3.eth.getAccounts((err, res) => {
-      console.log(err, res)
+      if (err) {
+        console.log('err', err)
+      }
 
+      console.log('res', res)
       this.setState({
         accountAddress: res[0]
       })
