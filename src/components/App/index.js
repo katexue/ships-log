@@ -17,11 +17,15 @@ export default class App extends React.Component {
   }
 
   onChangeAddress = () => {
+    console.log(web3Provider)
+
     this.seaport = new OpenSeaPort(web3Provider, {
       networkName: Network.Main
     })
     this.web3 = this.seaport.web3
     this.web3.eth.getAccounts((err, res) => {
+      console.log(err, res)
+
       this.setState({
         accountAddress: res[0]
       })

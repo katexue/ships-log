@@ -1,6 +1,7 @@
 import * as Web3 from 'web3'
 import BigNumber from 'bignumber.js'
-import { PortisProvider } from 'portis'
+// import { PortisProvider } from 'portis'
+import Portis from '@portis/web3'
 
 export const GOOGLE_ANALYTICS_ID = 'UA-111688253-4'
 export const OPENSEA_URL = "https://opensea.io"
@@ -9,7 +10,8 @@ export const GITHUB_URL = "https://github.com/ProjectOpenSea/ships-log"
 export const DEFAULT_DECIMALS = 18
 export let web3Provider = typeof web3 !== 'undefined'
   ? window.web3.currentProvider
-  : new Web3.providers.HttpProvider('https://mainnet.infura.io')
+  : new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/78b3936c4c1d49979063638ec950613c')
+// ^^ Project ID from https://infura.io/dashboard/ethereum
 
 // Replace this with Redux for more complex logic
 const networkCallbacks = []
@@ -19,9 +21,14 @@ export const onNetworkUpdate = (callback) => {
 
 export async function connectWallet() {
   if (!window.web3) {
-    web3Provider = new PortisProvider({
-      // Put your Portis API key here
-    })
+    // web3Provider = new PortisProvider({
+    //   // Put your Portis API key here
+    // })
+    // Portis wallet: https://docs.portis.io/#/quick-start
+    const portis = new Portis('002a5b91-a409-4675-beef-64fea029c62c', 'mainnet');
+    web3Provider = new Web3(portis.provider)
+    console.log(web3Provider)
+
   } else if (window.ethereum) {
     window.ethereum.enable()
   } else {
@@ -29,6 +36,11 @@ export async function connectWallet() {
     alert(errorMessage)
     throw new Error(errorMessage)
   }
+
+  web3Provider.eth.getAccounts((error, accounts) => {
+    console.log(accounts)
+  })
+
   networkCallbacks.map((c) => c(web3Provider))
 }
 
